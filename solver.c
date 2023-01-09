@@ -18,18 +18,16 @@ Sudoku exact cover binary matrix: https://www.stolaf.edu/people/hansonr/sudoku/e
 */
 
 
-#include <iostream>
-#include <array>
-
-using namespace std;
+#include <stdio.h>
+#include <stdbool.h>
 
 // linked matrix node
 struct node {
-    node *up;
-    node *down;
-    node *left;
-    node *right;
-    node *header;
+    struct node *up;
+    struct node *down;
+    struct node *left;
+    struct node *right;
+    struct node *header;
 
     int num;
     int row;
@@ -38,17 +36,17 @@ struct node {
 
 // 2d matrix node
 struct node2d {
-    bool filled = false;
-    node *pointer;
+    bool filled;
+    struct node *pointer;
 };
 
 // cover function
-void cover (node &col) {
-    col.left->right = col.right;
-    col.right->left = col.left;
+void cover(struct node *col) {
+    col->left->right = col->right;
+    col->right->left = col->left;
 
-    for (node *n1 = col.down; n1 != &col; n1 = n1->down) {
-        for (node *n2 = n1->right; n2 != n1; n2 = n2->right) {
+    for (struct node *n1 = col->down; n1 != col; n1 = n1->down) {
+        for (struct node *n2 = n1->right; n2 != n1; n2 = n2->right) {
             n2->up->down = n2->down;
             n2->down->up = n2->up;
         }
@@ -56,12 +54,12 @@ void cover (node &col) {
 }
 
 // uncover function
-void uncover (node &col) {
-    col.left->right = &col;
-    col.right->left = &col;
+void uncover(struct node *col) {
+    col->left->right = col;
+    col->right->left = col;
 
-    for (node *n1 = col.up; n1 != &col; n1 = n1->up) {
-        for (node *n2 = n1->left; n2 != n1; n2 = n2->left) {
+    for (struct node *n1 = col->up; n1 != col; n1 = n1->up) {
+        for (struct node *n2 = n1->left; n2 != n1; n2 = n2->left) {
             n2->up->down = n2;
             n2->down->up = n2;
         }
@@ -69,34 +67,34 @@ void uncover (node &col) {
 }
 
 // linked matrix & sudoku grid & number of solutions (global for solve)
-array<node, (10*9*9*4)+1> matrix;
-array<array<int, 9>, 9> sudoku;
+struct node matrix[10*9*9*4+1];
+int sudoku[9][9];
 int solutions = 0;
 
 // recursive solve function
-void solve () {
+void solve() {
     // if no columns remain uncovered print solution
     if (matrix[0].right == &matrix[0]) {
-        solutions ++;
-        cout << endl << "SOLUTION " << solutions << endl;
-        for (int i = 0; i < sudoku.size(); i ++) {
-            if (i == 3 || i == 6) cout << "------+-------+------" << endl;
-            for (int j = 0; j < sudoku[i].size(); j ++) {
-                if (j == 3 || j == 6) cout << "| ";
-                cout << sudoku[i][j] << " ";
+        solutions++;
+        printf("SOLUTION %d\n", solutions);
+        for (int i = 0; i < 9; i++) {
+            if (i == 3 || i == 6) printf("------+-------+------\n");
+            for (int j = 0; j < 9; j++) {
+                if (j == 3 || j == 6) printf("| ");
+                printf("%d ", sudoku[i][j]);
             }
-            cout << endl;
+            printf("\n");
         }
         return;
     }
 
     // find S heuristic (column with fewest nodes)
-    node *col;
+    struct node *col;
     int smallest = 10, size;
-    for (node *c = matrix[0].right; c != &matrix[0]; c = c->right) {
+    for (struct node *c = matrix[0].right; c != &matrix[0]; c = c->right) {
         size = 0;
-        for (node *r = c->down; r != c; r = r->down) {
-            size ++;
+        for (struct node *r = c->down; r != c; r = r->down) {
+            size++;
         }
         if (size < smallest) {
             smallest = size;
@@ -105,30 +103,33 @@ void solve () {
     }
 
     // go through column and cover each row in it one after another
-    cover(*col);
-    for (node *r = col->down; r != col; r = r->down) {
-        for (node *c = r->right; c != r; c = c->right) {
-            cover(*c->header);
+    cover(col);
+    for (struct node *r = col->down; r != col; r = r->down) {
+        for (struct node *c = r->right; c != r; c = c->right) {
+            cover(c->header);
         }
         sudoku[r->row][r->col] = r->num;
         // contine with the row as part of the solution
         solve();
         // after all possibilities with that row are explored, undo and try with the next row
-        for (node *c = r->left; c != r; c = c->left) {
-            uncover(*c->header);
+        for (struct node *c = r->left; c != r; c = c->left) {
+            uncover(c->header);
         }
     }
-    uncover(*col);
+    uncover(col);
 }
 
 int main () {
     // create 2d matrix
-    array<array<node2d, 9*9*4>, 9*9*9> matrix2d;
+    struct node2d matrix2d[9*9*9][9*9*4];
     int it = (9*9*4)+1;
-    array<int, 4> arr;
-    for (int i = 0; i < 9*9*9; i ++) {
-        arr = {i/9, (9*9)+(i%9)+((i/81)*9), (9*9*2)+(i%81), (9*9*3)+(i%9)+(((i%(9*9))/(9*3))*9)+((i/(9*9*3))*9*3)}; // took forever
-        for (int j = 0; j < 4; j ++) {
+    for (int i = 0; i < 9*9*9; i++) {
+        for (int j = 0; j < 9*9*4; j++) {
+            matrix2d[i][j].filled = false;
+            matrix2d[i][j].pointer = NULL;
+        }
+        int arr[4] = {i/9, (9*9)+(i%9)+((i/81)*9), (9*9*2)+(i%81), (9*9*3)+(i%9)+(((i%(9*9))/(9*3))*9)+((i/(9*9*3))*9*3)}; // took forever
+        for (int j = 0; j < 4; j++) {
             matrix2d[i][arr[j]].filled = true;
             matrix2d[i][arr[j]].pointer = &matrix[it];
 
@@ -136,13 +137,13 @@ int main () {
             matrix[it].num = (i%9)+1;
             matrix[it].row = i/81;
             matrix[it].col = (i/9)%9;
-            it ++;
+            it++;
         }
     }
 
     // create linked matrix headers
     matrix[0].left = &matrix[9*9*4];
-    for (int i = 1; i < (9*9*4)+1; i ++) {
+    for (int i = 1; i < (9*9*4)+1; i++) {
         matrix[i].up = &matrix[i];
         matrix[i].down = &matrix[i];
         matrix[i].left = &matrix[i-1];
@@ -151,9 +152,9 @@ int main () {
     matrix[9*9*4].right = &matrix[0];
 
     // assign linked matrix pointers based off of 2d matrix
-    node *leftNode;
-    for (int i = 0; i < 9*9*9; i ++) {
-        for (int j = 0; j < 9*9*4; j ++) {
+    struct node *leftNode;
+    for (int i = 0; i < 9*9*9; i++) {
+        for (int j = 0; j < 9*9*4; j++) {
             if (matrix2d[i][j].filled) {
                 // header
                 matrix2d[i][j].pointer->header = &matrix[j+1];
@@ -170,7 +171,7 @@ int main () {
                 }
 
                 // down
-                for (int n = i; n < 9*9*9; n ++) {
+                for (int n = i; n < 9*9*9; n++) {
                     if (matrix2d[n][j].filled && n != i) {
                         matrix2d[i][j].pointer->down = matrix2d[n][j].pointer;
                         break;
@@ -181,7 +182,7 @@ int main () {
                 }
 
                 // left
-                node *leftNode;
+                struct node *leftNode;
                 for (int n = j; n >= 0; n --) {
                     if (matrix2d[i][n].filled && n != j) {
                         matrix2d[i][j].pointer->left = matrix2d[i][n].pointer;
@@ -192,7 +193,7 @@ int main () {
                 }
 
                 // right
-                for (int n = j; n < 9*9*4; n ++) {
+                for (int n = j; n < 9*9*4; n++) {
                     if (matrix2d[i][n].filled && n != j) {
                         matrix2d[i][j].pointer->right = matrix2d[i][n].pointer;
                         break;
@@ -208,25 +209,25 @@ int main () {
     // load and dislay sudoku problem
     char n;
     it = 0;
-    cout << "PROBLEM" << endl << "paste: ";
-    while (cin >> n && it < 80) {
+    printf("PROBLEM\npaste: ");
+    while (scanf("%c", &n) && it < 80) {
         if (n == 32) n = 48;
-        if (it == 3*9 || it == 6*9) cout << "------+-------+------" << endl;
-        if (it%9 == 3 || it%9 == 6) cout << "| ";
-        cout << (n == 48 ? ' ' : n) << " ";
+        if (it == 3*9 || it == 6*9) printf("------+-------+------\n");
+        if (it%9 == 3 || it%9 == 6) printf("| ");
+        printf("%c ", (n == 48 ? ' ' : n));
         sudoku[it/9][it%9] = n-48;
-        it ++;
-        if (it%9 == 0) cout << endl;
+        it++;
+        if (it%9 == 0) printf("\n");
     }
-    cout << endl;
+    printf("\n");
 
     // cover numbers given by sudoku puzzle
-    for (int i = 0; i < sudoku.size(); i ++) {
-        for (int j = 0; j < sudoku[i].size(); j ++) {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
             if (sudoku[i][j] != 0) {
-                for (int k = 0; k < matrix.size(); k ++) {
+                for (int k = 0; k < 10*9*9*4+1; k++) {
                     if (matrix[k].num == sudoku[i][j] && matrix[k].row == i && matrix[k].col == j) {
-                        cover(*matrix[k].header);
+                        cover(matrix[k].header);
                     }
                 }
             }
@@ -236,6 +237,6 @@ int main () {
     // solve sudoku recursively & display solutions
     solve();
     if (solutions == 0) {
-        cout << "NO SOLUTIONS" << endl;
+        printf("NO SOLUTIONS\n");
     }
 }
