@@ -22,7 +22,7 @@ Note: According to [The Telegraph](https://www.telegraph.co.uk/news/science/scie
 
 ### Abstracting the Sudoku problem
 
-The way we solve this is by translating a Sudoku puzzle to a binary 2D matrix (which we will call true/false values). The rows represent choices, and the columns represent constraints.
+The way we solve this is by translating a Sudoku puzzle to a binary 2D matrix (which we will consider to be true/false values). The rows represent choices, and the columns represent constraints.
 
 The binary matrix looks something like this: https://www.stolaf.edu/people/hansonr/sudoku/exactcovermatrix.htm.
 > For example, a row may represent placing a 5 in position (1,3). This row would have exactly four 'true' entries:
