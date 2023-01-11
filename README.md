@@ -38,7 +38,7 @@ The numbers we are given to start a Sudoku problem represent rows already chosen
 
 ### Solving the exact cover problem
 
-Terminology: Consider what happens when we choose a row to add to our solution. It will fill four columns. But we don't want those columns to be filled a second time by some other row we pick, since that would make it an invalid filling. So for each column satisfied by our chosen row, we want to remove all rows which also fill that column since they are incompatible with our solution. In fact, we can just remove the columns too, since we don't need to worry about them anymore. When we do this to a column, we say we *cover* it.
+Key concept: Consider what happens when we choose a row to add to our solution. It will fill four columns. But we don't want those columns to be filled a second time by some other row we pick, since that would make it an invalid filling. So for each column satisfied by our chosen row, we want to remove all rows which also fill that column since they are incompatible with our solution. In fact, we can just remove the columns too, since we don't need to worry about them anymore. When we do this to a column, we say we *cover* it.
 
 Now, we start the problem with some rows already chosen for us (prefilled numbers). We cover the columns filled by these rows. Now we want to solve the resulting exact cover problem recursively as follows:
 1. Check if there are no columns left (they have all been covered). If so, we have found a solution! We can print it and return.
