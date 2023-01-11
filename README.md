@@ -24,7 +24,7 @@ Note: According to [The Telegraph](https://www.telegraph.co.uk/news/science/scie
 
 The way we solve this is by translating a Sudoku puzzle to a binary 2D matrix (which we will consider to be true/false values). The rows represent choices, and the columns represent constraints.
 
-The binary matrix looks something like this: https://www.stolaf.edu/people/hansonr/sudoku/exactcovermatrix.htm.
+The binary matrix looks something like [this](https://www.stolaf.edu/people/hansonr/sudoku/exactcovermatrix.htm).
 
 For example, a row may represent placing a 5 in position (1,3). This row would have exactly four 'true' entries:
 1. One in the column that represents having a 5 in row 3.
@@ -56,6 +56,6 @@ You might notice we do a lot of removing and adding back of rows and columns. Th
 
 ### Credits
 
-The dancing links algorithm was created by Donald Knuth. You can can read his excellent paper on it here: https://arxiv.org/pdf/cs/0011047.pdf.
+The dancing links algorithm was created by Donald Knuth. You can can read his excellent paper on it [here](https://arxiv.org/pdf/cs/0011047.pdf).
 
 (Code moved from a previous private repository.)
