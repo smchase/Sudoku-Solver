@@ -55,6 +55,6 @@ You might notice we do a lot of removing and adding back of rows and columns. Th
 
 ### Credits
 
-The dancing links algorithm was created by Donald Knuth. You can can read his excellent paper on it here: https://arxiv.org/pdf/cs/0011047.pdf
+The dancing links algorithm was created by Donald Knuth. You can can read his excellent paper on it here: https://arxiv.org/pdf/cs/0011047.pdf.
 
 (Code moved from a previous private repository.)
