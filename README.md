@@ -25,20 +25,21 @@ Note: According to [The Telegraph](https://www.telegraph.co.uk/news/science/scie
 The way we solve this is by translating a Sudoku puzzle to a binary 2D matrix (which we will consider to be true/false values). The rows represent choices, and the columns represent constraints.
 
 The binary matrix looks something like this: https://www.stolaf.edu/people/hansonr/sudoku/exactcovermatrix.htm.
-> For example, a row may represent placing a 5 in position (1,3). This row would have exactly four 'true' entries:
-> 1. One in the column that represents having a 5 in row 3.
-> 2. One in the column that represents having a 5 in column 1.
-> 3. One in the column that represents having a 5 in the top-left square.
-> 4. One in the column that represents having a number in position (1,3).
-> 
-> All other entries in the row would be false. For example, the entry in the column that represents having a 9 in row 3 would be false since that isn't satisfied by this row's choice.
+
+For example, a row may represent placing a 5 in position (1,3). This row would have exactly four 'true' entries:
+1. One in the column that represents having a 5 in row 3.
+2. One in the column that represents having a 5 in column 1.
+3. One in the column that represents having a 5 in the top-left square.
+4. One in the column that represents having a number in position (1,3).
+
+All other entries in the row would be false. For example, the entry in the column that represents having a 9 in row 3 would be false since that isn't satisfied by this row's choice.
 
 A filling of a Sudoku grid can be represented by its corresponding rows (placed numbers). A valid filling of a Sudoku grid must consist of enough rows such that every column has exactly one true entry. This is called an exact cover problem.
 The numbers we are given to start a Sudoku problem represent rows already chosen for us. We must then pick enough remaining rows to fill each column exactly once.
 
 ### Solving the exact cover problem
 
-Key concept: Consider what happens when we choose a row to add to our solution. It will fill four columns. But we don't want those columns to be filled a second time by some other row we pick, since that would make it an invalid filling. So for each column satisfied by our chosen row, we want to remove all rows which also fill that column since they are incompatible with our solution. In fact, we can just remove the columns too, since we don't need to worry about them anymore. When we do this to a column, we say we *cover* it.
+**Key concept**: Consider what happens when we choose a row to add to our solution. It will fill four columns. But we don't want those columns to be filled a second time by some other row we pick, since that would make it an invalid filling. So for each column satisfied by our chosen row, we want to remove all rows which also fill that column since they are incompatible with our solution. In fact, we can just remove the columns too, since we don't need to worry about them anymore. When we do this to a column, we say we *cover* it.
 
 Now, we start the problem with some rows already chosen for us (prefilled numbers). We cover the columns filled by these rows. Now we want to solve the resulting exact cover problem recursively as follows:
 1. Check if there are no columns left (they have all been covered). If so, we have found a solution! We can print it and return.
