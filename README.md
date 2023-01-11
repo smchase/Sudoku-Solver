@@ -49,7 +49,7 @@ Now, we start the problem with some rows already chosen for us (prefilled number
 
 ### Speeding things up
 
-When we pick our column in step 2 of the recursion, we can be a bit smarter and pick the most efficient column. Since we need to iterate through the rows which fill it, we can pick the solumn with the fewest rows that fill it. Thinking of the recursion as a tree, this keeps it as skinny as possible near the root, which speeds up our process.
+When we pick our column in step 2 of the recursion, we can be a bit smarter and pick the most efficient column. Since we need to iterate through the rows which fill it, this is the column with the fewest rows that fill it. Thinking of recursion as a tree, this keeps it as skinny as possible near the root, which speeds up our process.
 
 You might notice we do a lot of removing and adding back of rows and columns. These operations can be very expensive and greatly slow down our program due to how often they occur during our recursion. To cut down on this cost, we can represent our binary 2D matrix using 2D "grid" of doubly-linked lists. Each node is an entry in the matrix, with a link to the node above, below, to the left, and to the right. To remove a node from the matrix, we don't remove it from memory, but just update its neighbours to skip over it. But the node itself still knows where it is and where its neighbours are, so it can add itself back to the matrix by updating its neighbours again. We can add headers to this structure to facilitate scanning through our columns and accessing our matrix. This reduces all changes to the matrix to constant time operations.
 
