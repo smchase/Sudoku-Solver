@@ -30,7 +30,7 @@ The binary matrix looks something like this: https://www.stolaf.edu/people/hanso
 > 2. One in the column that represents having a 5 in column 1.
 > 3. One in the column that represents having a 5 in the top-left square.
 > 4. One in the column that represents having a number in position (1,3).
-
+> 
 > All other entries in the row would be false. For example, the entry in the column that represents having a 9 in row 3 would be false since that isn't satisfied by this row's choice.
 
 A filling of a Sudoku grid can be represented by its corresponding rows (placed numbers). A valid filling of a Sudoku grid must consist of enough rows such that every column has exactly one true entry. This is called an exact cover problem.
