@@ -4,7 +4,7 @@ A really fast Sudoku solver built using C.
 
 ## Usage
 
-To run the program, download and compile `solver.c`. Update `problem.txt` to the Sudoku problem you wish to solve using the format of the example below. When run, the program will print all possible solutions to the problem, or output that no solution exists if that's the case. It will also print how long it took to solve. **Easy problems can be solved in under 1 ms, and even the hardest problems shouldn't take more than a couple milliseconds.**
+To run the program, download and compile `solver.c`. Update `problem.txt` to the Sudoku problem you wish to solve using the format of the example below. When run, the program will print all possible solutions to the problem, or output that no solution exists if that's the case. It will also print how long it took to solve. Easy problems can be solved in less than a millisecond, and even the hardest problems shouldn't take more than a couple milliseconds.
 
 Example `problem.txt`:
 ```
