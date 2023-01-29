@@ -18,7 +18,7 @@ Example `problem.txt`:
 ..85...1.
 .9....4..
 ```
-Note: According to [The Telegraph](https://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html), the above is supposed to be the world's hardest Sudoku.
+According to [The Telegraph](https://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html), the above is supposed to be the world's hardest Sudoku.
 
 ## How it works
 
