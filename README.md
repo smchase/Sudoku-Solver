@@ -1,6 +1,6 @@
 # Millisecond Sudoku Solver 🚀
 
-A really fast Sudoku solver built using **C**.
+A really fast Sudoku solver built using C.
 
 ## Usage
 
