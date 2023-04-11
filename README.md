@@ -1,6 +1,6 @@
 # Millisecond Sudoku Solver 🚀
 
-A really fast Sudoku solver built using C. Easy problems can be solved in less than a millisecond, and even the hardest problems shouldn't take more than a couple milliseconds.
+A really fast Sudoku solver built using C++. Easy problems can be solved in less than a millisecond, and even the hardest problems shouldn't take more than a couple milliseconds.
 
 ## Usage
 
