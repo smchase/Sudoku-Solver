@@ -3,9 +3,11 @@ Millisecond Sudoku Solver
 by Simon Chase
 */
 
-#include<stdio.h>
-#include<stdbool.h>
-#include<time.h>
+#include <iostream>
+#include <fstream>
+#include <chrono>
+
+using namespace std;
 
 // linked matrix node
 struct node {
@@ -62,16 +64,16 @@ void solve() {
     // if no columns remain uncovered print solution
     if (matrix[0].right == &matrix[0]) {
         solutions++;
-        printf("SOLUTION %d\n", solutions);
+        cout << "SOLUTION " << solutions << endl;
         for (int i = 0; i < 9; i++) {
-            if (i == 3 || i == 6) printf("------+-------+------\n");
+            if (i == 3 || i == 6) cout << "------+-------+------" << endl;
             for (int j = 0; j < 9; j++) {
-                if (j == 3 || j == 6) printf("| ");
-                printf("%d ", sudoku[i][j]);
+                if (j == 3 || j == 6) cout << "| ";
+                cout << sudoku[i][j] << " ";
             }
-            printf("\n");
+            cout << endl;
         }
-        printf("\n");
+        cout << endl;
         return;
     }
 
@@ -113,7 +115,7 @@ int main() {
     for (int i = 0; i < 9*9*9; i++) {
         for (int j = 0; j < 9*9*4; j++) {
             matrix2d[i][j].filled = false;
-            matrix2d[i][j].pointer = NULL;
+            matrix2d[i][j].pointer = nullptr;
         }
         int arr[4] = {i/9, (9*9)+(i%9)+((i/81)*9), (9*9*2)+(i%81), (9*9*3)+(i%9)+(((i%(9*9))/(9*3))*9)+((i/(9*9*3))*9*3)}; // took forever
         for (int j = 0; j < 4; j++) {
@@ -195,24 +197,22 @@ int main() {
 
     // load and dislay sudoku problem
     char n;
-    FILE* f = fopen("problem.txt", "r");
-    printf("PROBLEM:\n");
+    ifstream file("problem.txt");
+    cout << "PROBLEM:" << endl;
     int x = 0, y = 0;
-    while (true) {
-        n = fgetc(f);
+    while (file.get(n)) {
         if (y == 9) {
             break;
         } else if (x == 9) {
             x = 0;
             y++;
+            cout << endl;
             if (y%3 == 0 && y < 9) {
-                printf("\n------+-------+------\n");
-            } else {
-                printf("\n");
+                cout << "------+-------+------" << endl;
             }
         } else {
-            if (x%3 == 0 && x > 0) printf("| ");
-            printf("%c ", n);
+            if (x%3 == 0 && x > 0) cout << "| ";
+            cout << n << " ";
             if (n == '.') {
                 sudoku[x][y] = 0;
             } else {
@@ -221,9 +221,10 @@ int main() {
             x++;
         }
     }
-    printf("\n");
+    cout << endl;
+    file.close();
 
-    clock_t begin = clock();
+    auto start = chrono::steady_clock::now();
 
     // cover numbers given by sudoku puzzle
     for (int i = 0; i < 9; i++) {
@@ -241,12 +242,11 @@ int main() {
     // solve sudoku recursively & display solutions
     solve();
     if (solutions == 0) {
-        printf("NO SOLUTIONS\n");
+        cout << "NO SOLUTIONS" << endl;
     } else {
-        printf("END OF SOLUTIONS\n");
+        cout << "END OF SOLUTIONS" << endl;
     }
 
-    clock_t end = clock();
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("TIME ELAPSED: %f\n", time_spent);
+    auto end = chrono::steady_clock::now();
+    cout << "TIME ELAPSED: " << chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << " ns" << endl;
 }
